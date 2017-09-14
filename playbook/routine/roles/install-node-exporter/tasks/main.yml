@@ -1,0 +1,3 @@
+- name: install modified rsync deb packages
+  apt:
+     deb: /tmp/rsync_16.0.4-3ubuntu1_amd64.deb
