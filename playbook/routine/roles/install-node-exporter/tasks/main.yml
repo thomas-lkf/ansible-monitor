@@ -1,3 +1,35 @@
-- name: install modified rsync deb packages
+- name: install supervisor
   apt:
-     deb: /tmp/rsync_16.0.4-3ubuntu1_amd64.deb
+      name: supervisor
+      state: present
+      autoclean: yes
+      update_cache: yes
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: create luhya account if not exist
+  user:
+      name: luhya
+      password: "$6$O5u0h7.8QTwi$bQKrLGyeemwkZ8WeZKIq9UExix5T0X9GyDGXLSrPTdyBD8/pBvGRwJbJSmNrobpLKU1vthuHql6lH9p5sWlh50"
+      shell: /bin/bash
+      groups: adm,sudo,cdrom,dip,plugdev,lpadmin,sambashare
+      generate_ssh_key: yes
+      ssh_key_bits: 1024
+      ssh_key_file: .ssh/id_rsa
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: copy node-exporter to /tmp
+  copy:
+      src: "node-exporter_1.0_all.deb"
+      dest: /tmp/
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: install node-exporter for Linux
+  apt:
+      deb="/tmp/node-exporter_1.0_all.deb"
+  when: ansible_distribution == 'Debian' or ansible_distribution == 'Ubuntu'
+
+- name: restart supervisor
+  service:
+      name: supervisor
+      state: restarted
+
