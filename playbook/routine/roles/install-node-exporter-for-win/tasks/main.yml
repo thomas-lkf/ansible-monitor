@@ -1,24 +1,25 @@
 - name: copy wmi*.msi into tmp file
   win_copy:
       src: "wmi_exporter-0.2.7-amd64.msi"
-      dest: c:\Temp
-  when: ansible_os_family="Windows" and ansible_architecture = "64-bit"
+      dest: c:\wmi_exporter-0.2.7-amd64.msi
+  when: ansible_os_family == "Windows" and ansible_architecture == "64-bit"
 
 - name: copy wmi*.msi into tmp file
   win_copy:
       src: "wmi_exporter-0.2.7-386.msi"
-      dest: c:\Temp
-  when: ansible_os_family="Windows" and ansible_architecture = "32-bit"
+      dest: c:\wmi_exporter-0.2.7-386.msi
+  when: ansible_os_family =="Windows" and ansible_architecture == "32-bit"
 
-- name: install i386 wmi-exporter for 32bit windows
+- name: install wmi-exporter for windows 32bit
   win_package:
-      path: c:\Temp\wmi_exporter-0.2.7-386.msi
+      path: c:\wmi_exporter-0.2.7-386.msi
+      product_id: '{B642B332-FB7D-433B-9C1D-3B19D5D5F26C}'
       state: present
-  when: ansible_os_family="Windows" and ansible_architecture = "32-bit"
+  when: ansible_os_family == "Windows" and ansible_architecture == "32-bit"
 
-- name: install x64 wmi-exporter for 64bit windows
+- name: install wmi-exporter for windows 64bit
   win_package:
-      path: c:\Temp\wmi_exporter-0.2.7-amd64.msi
+      path: c:\wmi_exporter-0.2.7-amd64.msi
+      product_id: wmi_exporter-0.2.7-amd64.msi
       state: present
-  when: ansible_os_family="Windows" and ansible_architecture = "64-bit"
-
+  when: ansible_os_family == "Windows" and ansible_architecture == "64-bit"
